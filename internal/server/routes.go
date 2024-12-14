@@ -1,6 +1,7 @@
 package server
 
 import (
+	"four-rooms/internal/inventory"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -21,10 +22,20 @@ func (s *Server) RegisterRoutes() http.Handler {
 	}))
 
 	e.GET("/", s.HelloWorldHandler)
-
 	e.GET("/health", s.healthHandler)
 
+	e.GET("/hotels/:id", s.getHotel)
+
 	return e
+}
+
+func (s *Server) getHotel(c echo.Context) error {
+	id := c.Param("id")
+	hotel, err := inventory.GetHotel(s.db.Conn(), id)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "hotel not found"})
+	}
+	return c.JSON(http.StatusOK, hotel)
 }
 
 func (s *Server) HelloWorldHandler(c echo.Context) error {
