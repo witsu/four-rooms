@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"blueprint-echo-sqlite-react/internal/server"
+	"four-rooms/internal/server"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {

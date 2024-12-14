@@ -1,4 +1,4 @@
-module blueprint-echo-sqlite-react
+module four-rooms
 
 go 1.23.2
 

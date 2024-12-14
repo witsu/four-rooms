@@ -1,4 +1,4 @@
-# Project blueprint-echo-sqlite-react
+# Project four-rooms
 
 One Paragraph of project description goes here
 

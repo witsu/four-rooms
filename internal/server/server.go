@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 
-	"blueprint-echo-sqlite-react/internal/database"
+	"four-rooms/internal/database"
 )
 
 type Server struct {
