@@ -37,3 +37,16 @@ Clean up binary from the last build:
 ```bash
 make clean
 ```
+
+## DB migrations
+[golang-migrate](https://github.com/golang-migrate/migrate) is used to run database migrations
+
+Create table
+```bash
+migrate create -ext sql -dir internal/database/migrations -seq create_hotels_table
+```
+
+Run migration
+```bash
+migrate -database internal/database/hotel.db -path internal/database/migrations up
+```
