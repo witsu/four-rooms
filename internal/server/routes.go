@@ -24,16 +24,25 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/", s.HelloWorldHandler)
 	e.GET("/health", s.healthHandler)
 
+	e.GET("/hotels", s.getHotels)
 	e.GET("/hotels/:id", s.getHotel)
 
 	return e
+}
+
+func (s *Server) getHotels(c echo.Context) error {
+	hotels, err := inventory.GetHotels(s.db.Conn())
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, hotels)
 }
 
 func (s *Server) getHotel(c echo.Context) error {
 	id := c.Param("id")
 	hotel, err := inventory.GetHotel(s.db.Conn(), id)
 	if err != nil {
-		return c.JSON(http.StatusNotFound, map[string]string{"error": "hotel not found"})
+		return echo.NewHTTPError(http.StatusNotFound, "hotel not found")
 	}
 	return c.JSON(http.StatusOK, hotel)
 }
