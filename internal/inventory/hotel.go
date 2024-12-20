@@ -30,7 +30,7 @@ func GetHotels(db *sql.DB) ([]Hotel, error) {
 	var hotels []Hotel
 	for rows.Next() {
 		var hotel Hotel
-		if err := rows.Scan(&hotel.ID, &hotel.Name, &hotel.Location); err != nil {
+		if err := rows.Scan(&hotel.ID, &hotel.Name, &hotel.Address, &hotel.Location); err != nil {
 			return nil, err
 		}
 		hotels = append(hotels, hotel)
