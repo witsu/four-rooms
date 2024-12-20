@@ -5,10 +5,19 @@ import (
 )
 
 type Hotel struct {
-	ID       string `json:"id"`
+	ID       int    `json:"id"`
 	Name     string `json:"name"`
 	Address  string `json:"address"`
 	Location string `json:"location"`
+}
+
+type Room struct {
+	ID          int    `json:"id"`
+	HotelID     int    `json:"hotel_id"`
+	Description string `json:"description"`
+	Size        int    `json:"size"`
+	Title       string `json:"title"`
+	Type        string `json:"type"`
 }
 
 func GetHotels(db *sql.DB) ([]Hotel, error) {
@@ -43,4 +52,33 @@ func GetHotel(db *sql.DB, id string) (Hotel, error) {
 	}
 
 	return hotel, nil
+}
+
+func GetHotelRooms(db *sql.DB, id string) ([]Room, error) {
+	rows, err := db.Query("SELECT * FROM rooms WHERE hotel_id = ?", id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var rooms []Room
+	for rows.Next() {
+		var room Room
+		if err := rows.Scan(
+			&room.ID,
+			&room.HotelID,
+			&room.Description,
+			&room.Size,
+			&room.Title,
+			&room.Type,
+		); err != nil {
+			return nil, err
+		}
+		rooms = append(rooms, room)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return rooms, nil
 }

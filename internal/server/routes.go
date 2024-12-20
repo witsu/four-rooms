@@ -26,6 +26,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	e.GET("/hotels", s.getHotels)
 	e.GET("/hotels/:id", s.getHotel)
+	e.GET("/hotels/:id/rooms", s.getHotelRooms)
 
 	return e
 }
@@ -45,6 +46,15 @@ func (s *Server) getHotel(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusNotFound, "hotel not found")
 	}
 	return c.JSON(http.StatusOK, hotel)
+}
+
+func (s *Server) getHotelRooms(c echo.Context) error {
+	id := c.Param("id")
+	rooms, err := inventory.GetHotelRooms(s.db.Conn(), id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "hotel rooms not found")
+	}
+	return c.JSON(http.StatusOK, rooms)
 }
 
 func (s *Server) HelloWorldHandler(c echo.Context) error {
