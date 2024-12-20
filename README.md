@@ -50,3 +50,12 @@ Run migration
 ```bash
 migrate -database internal/database/hotel.db -path internal/database/migrations up
 ```
+
+TODO UI
+- beer.css
+- useQuery
+
+TODO backend
+- room inventory
+- reservations
+- dynamic price

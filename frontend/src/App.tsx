@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import './App.css'
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
         
       {hotels.map(hotel => (
         <div>
-          <h2>{hotel.name}</h2>
+          <h2><Link to={`hotels/${hotel.id}`}>{hotel.name}</Link></h2>
           <p>{hotel.location}</p>
         </div>
       ))}
