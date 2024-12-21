@@ -31,17 +31,15 @@ type service struct {
 	db *sql.DB
 }
 
-var (
-	dburl      = os.Getenv("BLUEPRINT_DB_URL")
-	dbInstance *service
-)
-
 func New() Service {
-	// Reuse Connection
-	if dbInstance != nil {
-		return dbInstance
-	}
+	return new(os.Getenv("DB_URL"))
+}
 
+func NewTest() Service {
+	return new(os.Getenv("DB_TEST_URL"))
+}
+
+func new(dburl string) Service {
 	db, err := sql.Open("sqlite3", dburl)
 	if err != nil {
 		// This will not be a connection error, but a DSN parse error or
@@ -49,10 +47,9 @@ func New() Service {
 		log.Fatal(err)
 	}
 
-	dbInstance = &service{
+	return &service{
 		db: db,
 	}
-	return dbInstance
 }
 
 func (s *service) Conn() *sql.DB {
@@ -115,6 +112,6 @@ func (s *service) Health() map[string]string {
 // If the connection is successfully closed, it returns nil.
 // If an error occurs while closing the connection, it returns the error.
 func (s *service) Close() error {
-	log.Printf("Disconnected from database: %s", dburl)
+	log.Printf("Disconnected from database")
 	return s.db.Close()
 }
