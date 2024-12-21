@@ -70,7 +70,10 @@ func (s *Server) createReservation(c echo.Context) error {
 	if err := c.Validate(reserv); err != nil {
 		return err
 	}
-	// TODO save reservation to the database
+	if err := reservation.Create(s.db.Conn(), reserv); err != nil {
+		return err
+	}
+
 	return c.JSON(http.StatusOK, reserv)
 }
 
