@@ -10,8 +10,9 @@ import (
 func TestValidation(t *testing.T) {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 	err := validate.Struct(Reservation{
-		StartDate: parseTime("2021-01-01"),
-		EndDate:   parseTime("2021-01-02"),
+		RoomID:    1,
+		StartDate: parseDate("2021-01-01"),
+		EndDate:   parseDate("2021-01-02"),
 		FirstName: "John",
 		LastName:  "Doe",
 		Email:     "john.doe@example.com",
@@ -21,18 +22,19 @@ func TestValidation(t *testing.T) {
 	}
 
 	err = validate.Struct(Reservation{
-		StartDate: parseTime("2021-01-03"),
-		EndDate:   parseTime("2021-01-02"),
+		RoomID:    1,
+		StartDate: parseDate("2021-01-03"),
+		EndDate:   parseDate("2021-01-02"),
 		FirstName: "John",
 		LastName:  "Doe",
 		Email:     "john.doe@example.com",
 	})
 	if err == nil {
-		t.Error("expected error for invalid start date")
+		t.Error("expected error as start date is after end date")
 	}
 }
 
-func parseTime(dateStr string) time.Time {
+func parseDate(dateStr string) Date {
 	date, _ := time.Parse("2006-01-02", dateStr)
-	return date
+	return Date(date)
 }

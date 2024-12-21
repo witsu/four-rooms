@@ -1,0 +1,5 @@
+{
+    "go.testEnvVars": {
+        "DB_TEST_FILE": "hotel_test.db",
+    },
+}

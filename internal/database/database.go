@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -32,15 +34,21 @@ type service struct {
 }
 
 func New() Service {
-	return new(os.Getenv("DB_URL"))
+	return new(os.Getenv("DB_FILE"))
 }
 
 func NewTest() Service {
-	return new(os.Getenv("DB_TEST_URL"))
+	return new(os.Getenv("DB_TEST_FILE"))
 }
 
-func new(dburl string) Service {
-	db, err := sql.Open("sqlite3", dburl)
+func getDBPath(dbFile string) string {
+	_, b, _, _ := runtime.Caller(0)
+	basepath := filepath.Dir(b)
+	return filepath.Join(basepath, dbFile)
+}
+
+func new(dbFile string) Service {
+	db, err := sql.Open("sqlite3", getDBPath(dbFile))
 	if err != nil {
 		// This will not be a connection error, but a DSN parse error or
 		// another initialization error.

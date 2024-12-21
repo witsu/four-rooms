@@ -1,8 +1,10 @@
 package server
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"four-rooms/internal/database"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -64,6 +66,49 @@ func TestCreateReservationWhenMissingRequired(t *testing.T) {
 
 	if httpErr.Code != http.StatusBadRequest {
 		t.Errorf("createReservation() wrong status code = %v, expected = %v", httpErr.Code, http.StatusBadRequest)
+		return
+	}
+}
+
+func TestCreateReservationWhenOK(t *testing.T) {
+	e := echo.New()
+	e.Validator = &CustomValidator{validator: validator.New(validator.WithRequiredStructEnabled())}
+
+	payload := map[string]interface{}{
+		"hotel_id":   1,
+		"room_id":    1,
+		"start_date": "2021-01-01",
+		"end_date":   "2021-01-02",
+		"first_name": "John",
+		"last_name":  "Doe",
+		"email":      "john.doe@example.com",
+	}
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		t.Errorf("Error marshaling JSON: %v", err)
+		return
+	}
+	bodyReader := bytes.NewReader(jsonData)
+
+	req := httptest.NewRequest(http.MethodPost, "/reservations", bodyReader)
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON) // Set Content-Type header
+	resp := httptest.NewRecorder()
+	c := e.NewContext(req, resp)
+	s := &Server{
+		db: database.NewTest(),
+	}
+	defer func() {
+		s.db.Conn().Exec("DELETE FROM reservations")
+		s.db.Close()
+	}()
+
+	// Assertions
+	if err := s.createReservation(c); err != nil {
+		t.Error("createReservation() doesn't expect error")
+		return
+	}
+	if resp.Code != http.StatusOK {
+		t.Errorf("handler() wrong status code = %v", resp.Code)
 		return
 	}
 }

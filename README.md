@@ -58,4 +58,5 @@ TODO UI
 TODO backend
 - room inventory
 - reservations
+- users
 - dynamic price
