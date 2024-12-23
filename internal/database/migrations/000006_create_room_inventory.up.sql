@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS room_inventory (
     date TEXT NOT NULL,
     total INTEGER NOT NULL,
     total_booked INTEGER NOT NULL DEFAULT 0,
-    PRIMARY KEY (room_id, date)
+    PRIMARY KEY (room_id, date),
+    CHECK (total >= total_booked) 
 );
