@@ -32,6 +32,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	e.GET("/hotels/:id", s.getHotel)
 	e.GET("/hotels/:id/rooms", s.getHotelRooms)
 	e.POST("/reservations", s.createReservation)
+	e.GET("/search", s.search)
 
 	return e
 }
@@ -75,6 +76,25 @@ func (s *Server) createReservation(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, reserv)
+}
+
+func (s *Server) search(c echo.Context) error {
+	query, err := inventory.NewSearchQuery(
+		c.QueryParam("start"),
+		c.QueryParam("end"),
+		c.QueryParam("location"),
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	if err := c.Validate(query); err != nil {
+		return err
+	}
+	rooms, err := inventory.Search(s.db.Conn(), query)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusNotFound, "rooms not found")
+	}
+	return c.JSON(http.StatusOK, rooms)
 }
 
 func (s *Server) HelloWorldHandler(c echo.Context) error {
