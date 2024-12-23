@@ -22,12 +22,16 @@ type Reservation struct {
 }
 
 func Create(db *sql.DB, reserv *Reservation) error {
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
 	query := `
 		INSERT INTO reservations 
 		(hotel_id, room_id, start_date, end_date, first_name, last_name, email, status)
 		VALUES (?,?,?,?,?,?,?,?)
 	`
-	_, err := db.Exec(query,
+	_, err = tx.Exec(query,
 		reserv.HotelID,
 		reserv.RoomID,
 		reserv.StartDate.String(),
@@ -36,5 +40,19 @@ func Create(db *sql.DB, reserv *Reservation) error {
 		reserv.LastName,
 		reserv.Email,
 		STATUS_PENDING)
-	return err
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	updateQuery := `
+		UPDATE room_inventory 
+		SET total_booked = total_booked + 1 
+		WHERE room_id = ? AND date >= ? AND date < ?
+	`
+	_, err = tx.Exec(updateQuery, reserv.RoomID, reserv.StartDate.String(), reserv.EndDate.String())
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit()
 }

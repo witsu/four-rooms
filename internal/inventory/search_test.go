@@ -11,9 +11,12 @@ func TestSearch(t *testing.T) {
 
 	db.Conn().Exec("DELETE FROM room_inventory")
 
-	insertRoomInventory(t, db, 1, "2025-01-01", 1, 0)
-	insertRoomInventory(t, db, 1, "2025-01-02", 1, 0)
-	insertRoomInventory(t, db, 1, "2025-01-03", 1, 1)
+	if err := InsertRoomInventory(db.Conn(), 1, "2025-01-01", 1, 0); err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
+	if err := InsertRoomInventory(db.Conn(), 1, "2025-01-02", 1, 1); err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
 
 	// Test when wrong location
 	sq, err := NewSearchQuery("2025-01-01", "2025-01-02", "wrong-location")
@@ -55,12 +58,4 @@ func TestSearch(t *testing.T) {
 	}
 
 	db.Conn().Exec("DELETE FROM room_inventory")
-}
-
-func insertRoomInventory(t *testing.T, db database.Service, roomID int, date string, total, booked int) {
-	query := `INSERT INTO room_inventory (room_id, date, total, total_booked) VALUES (?, ?, ?, ?)`
-	_, err := db.Conn().Exec(query, roomID, date, total, booked)
-	if err != nil {
-		t.Error(err)
-	}
 }

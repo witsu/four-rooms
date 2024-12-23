@@ -33,10 +33,10 @@ func Search(db *sql.DB, sq SearchQuery) ([]Room, error) {
 		JOIN hotels AS h ON r.hotel_id = h.id
 		JOIN room_inventory AS ri ON r.id = ri.room_id
 		WHERE h.location = ?
-			AND ri.date >= ? AND ri.date <= ? 
+			AND ri.date >= ? AND ri.date < ? 
 			AND ri.total > ri.total_booked 
 		GROUP BY r.id
-		HAVING COUNT(r.id) = (julianday(?) - julianday(?) + 1)
+		HAVING COUNT(r.id) = (julianday(?) - julianday(?))
 	`
 
 	rows, err := db.Query(query,
