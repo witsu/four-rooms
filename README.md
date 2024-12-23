@@ -1,10 +1,59 @@
-# Project four-rooms
+# Four Rooms
 
-One Paragraph of project description goes here
+This is a hobby project aimed at learning by creating a working hotel reservation system. The project also serves as a playground for trying out new Go and React packages.
 
-## Getting Started
+## System Design
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+The design of this project is inspired by Chapter 7, "Hotel Reservation," from the book "System Design Interview - An Insider's Guide, Volume 2."
+
+Database tables
+- hotels
+- rooms
+- room_inventory
+- reservations
+
+API routes
+- GET "/hotels",
+- GET "/hotels/:id",
+- GET "/hotels/:id/rooms",
+- POST "/reservations",
+- GET "/search",
+
+## Project Goals
+
+1. **Learning**: Gain hands-on experience by building a full-stack application.
+2. **Experimentation**: Try out new Go packages and technologies.
+
+## Status
+
+**Work in Progress**
+
+### TODO Frontend
+- Implement functionality to:
+  - Search available rooms by location and dates
+  - Reserve a room
+  - View reservation details by ID
+- Improve layout by using a CSS framework, such as:
+  - Beer.css
+  - Bootstrap
+  - Tailwind CSS
+
+### TODO Backend
+- Implement pricing:
+  - Start with static pricing
+  - Later, add dynamic pricing based on demand and availability
+- Implement user authentication:
+  - User registration
+  - User login
+- Implement management panel to update hotels and rooms
+- Enhance error handling and validation
+- Add more unit and integration tests
+
+## Technologies Used
+
+- **Backend**: Go, Echo, Validator
+- **Database**: SQLite, Migrate
+- **Frontend**: Typescript, React with router
 
 ## MakeFile
 
@@ -50,14 +99,3 @@ Run migration
 ```bash
 migrate -database internal/database/hotel.db -path internal/database/migrations up
 ```
-
-TODO UI 
-- search rooms
-- reserve room
-- improve
-  - beer.css
-  - useQuery
-
-TODO backend
-- users
-- dynamic price
