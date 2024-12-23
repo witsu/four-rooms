@@ -51,12 +51,15 @@ Run migration
 migrate -database internal/database/hotel.db -path internal/database/migrations up
 ```
 
-TODO UI
-- beer.css
-- useQuery
+TODO UI 
+- search rooms
+- reserve room
+- improve
+  - beer.css
+  - useQuery
 
 TODO backend
-- room inventory
-- reservations
+- test search route
+- reservation should increment total_booked in transaction
 - users
 - dynamic price
