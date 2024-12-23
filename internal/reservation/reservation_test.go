@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	dt "four-rooms/internal/datetime"
+
 	"github.com/go-playground/validator/v10"
 )
 
@@ -34,7 +36,7 @@ func TestValidation(t *testing.T) {
 	}
 }
 
-func parseDate(dateStr string) Date {
+func parseDate(dateStr string) dt.Date {
 	date, _ := time.Parse("2006-01-02", dateStr)
-	return Date(date)
+	return dt.Date(date)
 }
