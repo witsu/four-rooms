@@ -31,7 +31,7 @@ func Create(db *sql.DB, reserv *Reservation) error {
 		(hotel_id, room_id, start_date, end_date, first_name, last_name, email, status)
 		VALUES (?,?,?,?,?,?,?,?)
 	`
-	_, err = tx.Exec(query,
+	res, err := tx.Exec(query,
 		reserv.HotelID,
 		reserv.RoomID,
 		reserv.StartDate.String(),
@@ -44,6 +44,13 @@ func Create(db *sql.DB, reserv *Reservation) error {
 		tx.Rollback()
 		return err
 	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		return err
+	}
+	reserv.ID = int(id)
+
 	updateQuery := `
 		UPDATE room_inventory 
 		SET total_booked = total_booked + 1 
@@ -55,4 +62,30 @@ func Create(db *sql.DB, reserv *Reservation) error {
 		return err
 	}
 	return tx.Commit()
+}
+
+// TODO add route to get reservation by id
+func Get(db *sql.DB, id int) (Reservation, error) {
+	row := db.QueryRow("SELECT * FROM reservations WHERE id = ?", id)
+
+	var reserv Reservation
+	var start, end string
+	err := row.Scan(
+		&reserv.ID,
+		&reserv.HotelID,
+		&reserv.RoomID,
+		&start,
+		&end,
+		&reserv.FirstName,
+		&reserv.LastName,
+		&reserv.Email,
+		&reserv.Status,
+	)
+	if err != nil {
+		return Reservation{}, err
+	}
+	reserv.StartDate, _ = dt.Parse(start)
+	reserv.EndDate, _ = dt.Parse(start)
+
+	return reserv, nil
 }

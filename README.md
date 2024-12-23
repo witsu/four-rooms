@@ -59,7 +59,5 @@ TODO UI
   - useQuery
 
 TODO backend
-- test search route
-- reservation should increment total_booked in transaction
 - users
 - dynamic price

@@ -64,8 +64,41 @@ func TestCreateWhenBooked(t *testing.T) {
 }
 
 func TestCreateWhenOK(t *testing.T) {
-	// TODO test room inventory after reservation
-	// TODO test reservation in the database
+	db := database.NewTest()
+	defer db.Close()
+
+	db.Conn().Exec("DELETE FROM room_inventory")
+	db.Conn().Exec("DELETE FROM reservations")
+
+	if err := inventory.InsertRoomInventory(db.Conn(), 1, "2025-01-01", 1, 0); err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
+	reserv := Reservation{
+		HotelID:   1,
+		RoomID:    1,
+		StartDate: parseDate("2025-01-01"),
+		EndDate:   parseDate("2025-01-02"),
+		FirstName: "John",
+		LastName:  "Doe",
+		Email:     "john.doe@example.com",
+	}
+	err := Create(db.Conn(), &reserv)
+	if err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
+	if reserv.ID == 0 {
+		t.Error("expected reservation ID > 0")
+	}
+	dbReserv, err := Get(db.Conn(), reserv.ID)
+	if err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
+	if dbReserv.ID == 0 {
+		t.Errorf("expected reservation, got %v", dbReserv)
+	}
+
+	db.Conn().Exec("DELETE FROM room_inventory")
+	db.Conn().Exec("DELETE FROM reservations")
 }
 
 func parseDate(dateStr string) dt.Date {
