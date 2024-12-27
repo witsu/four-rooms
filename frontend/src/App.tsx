@@ -7,33 +7,33 @@ function App() {
 
   return (
     <>
-      <nav class="left drawer l">
+      <nav className="left drawer l">
         <header>
           <nav>
             <h6>Four rooms</h6>
           </nav>
         </header>
-        <a>
+        <div>
+          <i>search</i>
+          <Link to="/search">Search</Link>
+        </div>
+        <div>
           <i>home</i>
           <Link to="/hotels">Hotels</Link>
-        </a>
-        {/* <a>
-          <i>search</i>
-          <div>Search</div>
-        </a> */}
+        </div>
       </nav>
 
-      <nav class="top s m left-align">
+      <nav className="top s m left-align">
         <button data-ui="#menu" className='transparent circle'>
           <i>menu</i>
           <menu id="menu" className='no-wrap'>
+            <Link to="/search">Search</Link>
             <Link to="/hotels">Hotels</Link>
-            {/* <a>Search</a> */}
           </menu>
         </button>
       </nav>
 
-      <main class="responsive">
+      <main className="responsive">
         <Outlet />
       </main>
     </>
