@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { formatTomorrowDate, formatDate } from './helpers';
 
 function SearchPage() {
@@ -39,15 +39,15 @@ function SearchPage() {
       <form onSubmit={search}>
         <div className="field label border">
           <input type="date" name="start" defaultValue={start} />
-          <label>Start Date:</label>
+          <label>Start Date</label>
         </div>
         <div className="field label border">
           <input type="date" name="end" defaultValue={end} min={start} />
-          <label>End Date:</label>
+          <label>End Date</label>
         </div>
         <div className="field label border">
           <input type="text" name="location" defaultValue={location} />
-          <label>Location:</label>
+          <label>Location</label>
         </div>
         <button type="submit">Search</button>
       </form>
@@ -61,7 +61,7 @@ function SearchPage() {
             <div>Size: {room.size} m2</div>
             <div>{room.description}</div>
             <nav>
-                <button>Book</button>
+              <Link className="button" to={`/reservation?start=${start}&end=${end}&roomId=${room.id}`}>Book</Link>
             </nav>
         </article>
       ))}
