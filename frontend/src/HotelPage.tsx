@@ -25,15 +25,15 @@ function HotelPage() {
 
   return (
     <>
-      <h1>{hotel.name}</h1>
+      <h3>{hotel.name}</h3>
         
       {rooms.map(room => (
-        <div key={room.id}>
-          <h2>from the movie "{room.title}"</h2>
-          <p>{room.type}</p>
-          <p>Size: {room.size} m2</p>
-          <p>{room.description}</p>
-        </div>
+        <article key={room.id}>
+          <h5>from the movie "{room.title}"</h5>
+          <div>{room.type}</div>
+          <div>Size: {room.size} m2</div>
+          <div>{room.description}</div>
+        </article>
       ))}
     </>
   )

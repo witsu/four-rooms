@@ -16,13 +16,13 @@ function HotelsPage() {
 
   return (
     <>
-      <h1>Hotels</h1>
-        
+      <h3>Hotels</h3>
+
       {hotels.map(hotel => (
-        <div key={hotel.id}>
-          <h2><Link to={`${hotel.id}`}>{hotel.name}</Link></h2>
-          <p>{hotel.location}</p>
-        </div>
+        <article key={hotel.id}>
+          <h5><Link to={`${hotel.id}`}>{hotel.name}</Link></h5>
+          <div>{hotel.location}</div>
+        </article>
       ))}
     </>
   )

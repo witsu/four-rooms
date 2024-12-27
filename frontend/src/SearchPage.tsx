@@ -37,30 +37,33 @@ function SearchPage() {
   return (
     <>
       <form onSubmit={search}>
-        <div class="field label border">
+        <div className="field label border">
           <input type="date" name="start" defaultValue={start} />
           <label>Start Date:</label>
         </div>
-        <div class="field label border">
+        <div className="field label border">
           <input type="date" name="end" defaultValue={end} min={start} />
           <label>End Date:</label>
         </div>
-        <div class="field label border">
+        <div className="field label border">
           <input type="text" name="location" defaultValue={location} />
           <label>Location:</label>
         </div>
         <button type="submit">Search</button>
       </form>
       
-      <h1>Search results</h1>
+      <h3>Search results</h3>
       {rooms.length === 0 && <p>No rooms available. Try changing dates or location.</p>}
       {rooms.map(room => (
-        <div key={room.id}>
-          <h2>from the movie "{room.title}"</h2>
-          <p>{room.type}</p>
-          <p>Size: {room.size} m2</p>
-          <p>{room.description}</p>
-        </div>
+        <article key={room.id}>
+            <h5>from the movie "{room.title}"</h5>
+            <div>{room.type}</div>
+            <div>Size: {room.size} m2</div>
+            <div>{room.description}</div>
+            <nav>
+                <button>Book</button>
+            </nav>
+        </article>
       ))}
     </>
   )
