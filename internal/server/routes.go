@@ -94,6 +94,9 @@ func (s *Server) search(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusNotFound, "rooms not found")
 	}
+	if rooms == nil {
+		rooms = []inventory.Room{}
+	}
 	return c.JSON(http.StatusOK, rooms)
 }
 

@@ -1,10 +1,13 @@
 package server
 
 import (
+	"encoding/json"
 	"errors"
 	"four-rooms/internal/database"
+	"four-rooms/internal/inventory"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
 	"github.com/go-playground/validator/v10"
@@ -36,7 +39,7 @@ func TestSearchWhenMissingParams(t *testing.T) {
 	}
 }
 
-func TestSearchWhenOK(t *testing.T) {
+func TestSearchWhenEmpty(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New(validator.WithRequiredStructEnabled())}
 
@@ -56,6 +59,16 @@ func TestSearchWhenOK(t *testing.T) {
 	}
 	if resp.Code != http.StatusOK {
 		t.Errorf("search() wrong status code = %v", resp.Code)
+		return
+	}
+	var got []inventory.Room
+	if err := json.NewDecoder(resp.Body).Decode(&got); err != nil {
+		t.Errorf("search() error decoding response body: %v", err)
+		return
+	}
+	expected := []inventory.Room{}
+	if !reflect.DeepEqual(expected, got) {
+		t.Errorf("search() wrong response body. expected = %v, actual = %v", expected, got)
 		return
 	}
 }
