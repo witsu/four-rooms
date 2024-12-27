@@ -28,15 +28,20 @@ API routes
 
 **Work in Progress**
 
+### TODO Migration
+Add fields
+- Hotel
+  - description
+  - image
+- Room
+  - price
+  - image
+- Reservation
+  - total_price
+
 ### TODO Frontend
 - Implement functionality to:
-  - Search available rooms by location and dates
-  - Reserve a room
   - View reservation details by ID
-- Improve layout by using a CSS framework, such as:
-  - Beer.css
-  - Bootstrap
-  - Tailwind CSS
 
 ### TODO Backend
 - Implement pricing:
