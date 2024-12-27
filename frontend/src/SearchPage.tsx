@@ -7,7 +7,7 @@ function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const today = new Date();
   const start = searchParams.get("start") ?? formatDate(today);
-  const end = searchParams.get("end") ?? formatTomorrowDate(start);
+  const end = searchParams.get("end") ?? formatTomorrowDate(today);
   const location = searchParams.get("location") ?? 'New York';
 
   function search(event) {
@@ -52,7 +52,8 @@ function SearchPage() {
         <button type="submit">Search</button>
       </form>
       
-      <h1>Search results</h1>  
+      <h1>Search results</h1>
+      {rooms.length === 0 && <p>No rooms available. Try changing dates or location.</p>}
       {rooms.map(room => (
         <div key={room.id}>
           <h2>from the movie "{room.title}"</h2>

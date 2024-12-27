@@ -19,7 +19,7 @@ function HotelsPage() {
       <h1>Hotels</h1>
         
       {hotels.map(hotel => (
-        <div>
+        <div key={hotel.id}>
           <h2><Link to={`${hotel.id}`}>{hotel.name}</Link></h2>
           <p>{hotel.location}</p>
         </div>

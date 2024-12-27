@@ -28,7 +28,7 @@ function HotelPage() {
       <h1>{hotel.name}</h1>
         
       {rooms.map(room => (
-        <div>
+        <div key={room.id}>
           <h2>from the movie "{room.title}"</h2>
           <p>{room.type}</p>
           <p>Size: {room.size} m2</p>
