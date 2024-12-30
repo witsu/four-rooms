@@ -29,7 +29,8 @@ func NewSearchQuery(start, end, location string) (SearchQuery, error) {
 
 func Search(db *sql.DB, sq SearchQuery) ([]Room, error) {
 	query := `
-		SELECT r.* FROM rooms AS r
+		SELECT r.id, r.hotel_id, r.description, r.size, r.title, r.type, r.price 
+		FROM rooms AS r
 		JOIN hotels AS h ON r.hotel_id = h.id
 		JOIN room_inventory AS ri ON r.id = ri.room_id
 		WHERE h.location = ?
@@ -61,6 +62,7 @@ func Search(db *sql.DB, sq SearchQuery) ([]Room, error) {
 			&room.Size,
 			&room.Title,
 			&room.Type,
+			&room.Price,
 		); err != nil {
 			return nil, err
 		}

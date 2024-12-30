@@ -18,10 +18,11 @@ type Room struct {
 	Size        int    `json:"size"`
 	Title       string `json:"title"`
 	Type        string `json:"type"`
+	Price       int    `json:"price"`
 }
 
 func GetHotels(db *sql.DB) ([]Hotel, error) {
-	rows, err := db.Query("SELECT * FROM hotels")
+	rows, err := db.Query("SELECT id, name, address, location FROM hotels")
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +44,7 @@ func GetHotels(db *sql.DB) ([]Hotel, error) {
 }
 
 func GetHotel(db *sql.DB, id string) (Hotel, error) {
-	row := db.QueryRow("SELECT * FROM hotels WHERE id = ?", id)
+	row := db.QueryRow("SELECT id, name, address, location FROM hotels WHERE id = ?", id)
 
 	var hotel Hotel
 	err := row.Scan(&hotel.ID, &hotel.Name, &hotel.Address, &hotel.Location)
@@ -55,7 +56,12 @@ func GetHotel(db *sql.DB, id string) (Hotel, error) {
 }
 
 func GetHotelRooms(db *sql.DB, id string) ([]Room, error) {
-	rows, err := db.Query("SELECT * FROM rooms WHERE hotel_id = ?", id)
+	query := `
+		SELECT id, hotel_id, description, size, title, type, price
+		FROM rooms 
+		WHERE hotel_id = ?
+	`
+	rows, err := db.Query(query, id)
 	if err != nil {
 		return nil, err
 	}
@@ -71,6 +77,7 @@ func GetHotelRooms(db *sql.DB, id string) ([]Room, error) {
 			&room.Size,
 			&room.Title,
 			&room.Type,
+			&room.Price,
 		); err != nil {
 			return nil, err
 		}
