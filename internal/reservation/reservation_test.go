@@ -57,7 +57,8 @@ func TestCreateWhenBooked(t *testing.T) {
 		LastName:  "Doe",
 		Email:     "john.doe@example.com",
 	}
-	err := Create(db.Conn(), &reserv)
+	price := 100
+	err := Create(db.Conn(), &reserv, price)
 	if err == nil {
 		t.Errorf("expected error, got %v", err)
 	}
@@ -82,12 +83,16 @@ func TestCreateWhenOK(t *testing.T) {
 		LastName:  "Doe",
 		Email:     "john.doe@example.com",
 	}
-	err := Create(db.Conn(), &reserv)
+	price := 100
+	err := Create(db.Conn(), &reserv, price)
 	if err != nil {
 		t.Errorf("expected no error, got %v", err)
 	}
 	if reserv.ID == 0 {
 		t.Error("expected reservation ID > 0")
+	}
+	if reserv.TotalPrice != 100 {
+		t.Error("expected total price equal 0")
 	}
 	dbReserv, err := Get(db.Conn(), reserv.ID)
 	if err != nil {

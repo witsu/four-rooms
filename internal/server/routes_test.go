@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"four-rooms/internal/database"
+	"four-rooms/internal/inventory"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -99,12 +100,16 @@ func TestCreateReservationWhenOK(t *testing.T) {
 	}
 	defer func() {
 		s.db.Conn().Exec("DELETE FROM reservations")
+		s.db.Conn().Exec("DELETE FROM rooms")
 		s.db.Close()
 	}()
+	if err := inventory.InsertRoom(s.db.Conn(), 1, 1, 100); err != nil {
+		t.Errorf("expected no error, got %v", err)
+	}
 
 	// Assertions
 	if err := s.createReservation(c); err != nil {
-		t.Error("createReservation() doesn't expect error")
+		t.Errorf("createReservation() doesn't expect error = %v", err)
 		return
 	}
 	if resp.Code != http.StatusOK {

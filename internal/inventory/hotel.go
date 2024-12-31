@@ -89,3 +89,28 @@ func GetHotelRooms(db *sql.DB, id string) ([]Room, error) {
 
 	return rooms, nil
 }
+
+func GetHotelRoom(db *sql.DB, hotelID, roomID int) (Room, error) {
+	query := `
+		SELECT id, hotel_id, description, size, title, type, price 
+		FROM rooms 
+		WHERE hotel_id = ? AND id = ?
+	`
+	row := db.QueryRow(query, hotelID, roomID)
+
+	var room Room
+	err := row.Scan(
+		&room.ID,
+		&room.HotelID,
+		&room.Description,
+		&room.Size,
+		&room.Title,
+		&room.Type,
+		&room.Price,
+	)
+	if err != nil {
+		return Room{}, err
+	}
+
+	return room, nil
+}

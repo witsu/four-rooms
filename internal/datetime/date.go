@@ -23,5 +23,9 @@ func (d *Date) UnmarshalJSON(bytes []byte) error {
 }
 
 func (d *Date) String() string {
-	return time.Time(*d).Format(time.DateOnly)
+	return d.Time().Format(time.DateOnly)
+}
+
+func (d *Date) Time() time.Time {
+	return time.Time(*d)
 }
