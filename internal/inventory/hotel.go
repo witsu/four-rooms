@@ -55,13 +55,13 @@ func GetHotel(db *sql.DB, id string) (Hotel, error) {
 	return hotel, nil
 }
 
-func GetHotelRooms(db *sql.DB, id string) ([]Room, error) {
+func GetHotelRooms(db *sql.DB, hotelID string) ([]Room, error) {
 	query := `
 		SELECT id, hotel_id, description, size, title, type, price
 		FROM rooms 
 		WHERE hotel_id = ?
 	`
-	rows, err := db.Query(query, id)
+	rows, err := db.Query(query, hotelID)
 	if err != nil {
 		return nil, err
 	}
@@ -90,13 +90,13 @@ func GetHotelRooms(db *sql.DB, id string) ([]Room, error) {
 	return rooms, nil
 }
 
-func GetHotelRoom(db *sql.DB, hotelID, roomID int) (Room, error) {
+func GetHotelRoom(db *sql.DB, roomID int) (Room, error) {
 	query := `
 		SELECT id, hotel_id, description, size, title, type, price 
 		FROM rooms 
-		WHERE hotel_id = ? AND id = ?
+		WHERE id = ?
 	`
-	row := db.QueryRow(query, hotelID, roomID)
+	row := db.QueryRow(query, roomID)
 
 	var room Room
 	err := row.Scan(

@@ -71,7 +71,7 @@ func (s *Server) createReservation(c echo.Context) error {
 	if err := c.Validate(reserv); err != nil {
 		return err
 	}
-	room, err := inventory.GetHotelRoom(s.db.Conn(), reserv.HotelID, reserv.RoomID)
+	room, err := inventory.GetHotelRoom(s.db.Conn(), reserv.RoomID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "hotel room not found")
 	}
