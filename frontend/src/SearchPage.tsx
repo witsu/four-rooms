@@ -58,8 +58,9 @@ function SearchPage() {
         <article key={room.id}>
             <h5>from the movie "{room.title}"</h5>
             <div>{room.type}</div>
-            <div>Size: {room.size} m2</div>
             <div>{room.description}</div>
+            <div>Size: {room.size} m2</div>
+            <div>Price per night: <strong>{room.price}€</strong></div>
             <nav>
               <Link className="button" to={`/reservation?start=${start}&end=${end}&roomId=${room.id}`}>Book</Link>
             </nav>
